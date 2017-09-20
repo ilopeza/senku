@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Casilla} from '../casilla';
 import {Pieza} from '../pieza';
 import {EstadoPosicion} from '../estado-posicion.enum';
@@ -11,8 +11,11 @@ import {EstadoPosicion} from '../estado-posicion.enum';
 export class TableroComponent implements OnInit {
 
   casillas: Casilla[][];
+  selectedCasillaFrom: Casilla;
+  selectedCasillaTo: Casilla;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     const x = 9;
@@ -20,23 +23,31 @@ export class TableroComponent implements OnInit {
     let index = 0;
     this.casillas = [];
 
+    console.log('Creando tablero con ' + (x * y) + ' casillas');
     for (let i = 0; i < x; i++) {
-      this.casillas[i] = []
-        for (let j = 0; j < y; j++) {
-          let estadoCasilla = EstadoPosicion.noDisponible;
-          let p = null;
-          if ((i >= 4 && i <= 6) || (j >= 3 && j <= 6)){
+      this.casillas[i] = [];
+      for (let j = 0; j < y; j++) {
+        let estadoCasilla = EstadoPosicion.noDisponible;
+        let p = null;
+        if ((i > 2 && i < 6)
+            || (j > 2 && j < 6)) {
+          if (i === 4 && j === 4) {
+            estadoCasilla = EstadoPosicion.vacio;
+          } else {
             estadoCasilla = EstadoPosicion.ocupado;
             p = new Pieza(index, true);
           }
-          const casilla = new Casilla(i, j, estadoCasilla);
-          if (p != null) {
-             casilla.pieza = p;
-          }
-          this.casillas[i][j] = casilla;
-          index++;
         }
+        const casilla = new Casilla(i, j, estadoCasilla);
+        if (p != null) {
+          casilla.pieza = p;
+        }
+        this.casillas[i][j] = casilla;
+        index++;
+      }
     }
+    console.log('Terminado tablero con ' + (x * y) + ' casillas');
   }
+
 
 }

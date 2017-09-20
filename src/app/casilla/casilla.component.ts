@@ -11,10 +11,13 @@ export class CasillaComponent implements OnInit {
 
   @Input() casilla: Casilla;
   estadoClass: string;
+  selected: boolean;
+
   constructor() { }
 
   ngOnInit() {
-    switch (this.casilla.estado) {
+    this.selected = false;
+    /*switch (this.casilla.estado) {
       case EstadoPosicion.vacio:
         this.estadoClass = 'vacio';
         break;
@@ -23,7 +26,15 @@ export class CasillaComponent implements OnInit {
         break;
       case EstadoPosicion.noDisponible:
         this.estadoClass = 'no-disponible';
-    }
+    }*/
   }
 
+  select(): void {
+    this.selected = !this.selected;
+    /*if(this.selected){
+      this.selected = false;
+    }else{
+      this.selected = true;
+    }*/
+  }
 }

@@ -1,3 +1,5 @@
-<div>
-  <app-casilla *ngFor="let casilla of casillas" [casilla]="casilla"></app-casilla>
+<div class="container-fluid">
+  <div *ngFor="let cas of casillas" class="row">
+      <app-casilla *ngFor="let casilla of cas" [casilla]="casilla"></app-casilla>
+  </div>
 </div>

@@ -1,9 +1,12 @@
-div {
-  background-color: aqua;
+.square {
   height: 50px;
   width: 50px;
+}
+
+.square-border {
   border: solid;
   border-color: black;
+  border-width: medium;
 }
 
 .vacio {
@@ -12,9 +15,20 @@ div {
 
 .ocupado {
   background-color: firebrick;
-  border-bottom-color: black;
+  text-align: center;
 }
 
 .no-disponible {
   background-color: darkgray;
+}
+
+.tiene-pieza {
+  border-radius: 50px;
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+}
+
+.selected {
+  opacity: 0.5;
 }

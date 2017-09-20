@@ -14,6 +14,24 @@ export class Casilla {
     this._estado = estado;
   }
 
+  // metodos publicos
+  vaciarCasilla(): boolean {
+    if (this._estado !== EstadoPosicion.ocupado) {
+      return false;
+    }
+    this._estado = EstadoPosicion.vacio;
+    this._pieza = null;
+  }
+
+  ocuparCasilla(pieza: Pieza) {
+    if (this._estado !== EstadoPosicion.vacio) {
+      return false;
+    }
+    this._estado = EstadoPosicion.ocupado;
+    this._pieza = pieza;
+  }
+
+  // getters y setters
   get posX(): number {
     return this._posX;
   }

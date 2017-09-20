@@ -1,3 +1,10 @@
-<div class="square {{estadoClass}}">
-  {{casilla.posX}} {{casilla.posY}}
+<div class="square"
+     [class.vacio] = "casilla.estado === 0"
+     [class.ocupado] = "casilla.estado === 1"
+     [class.no-disponible] = "casilla.estado === 2"
+     [class.square-border] = "casilla.estado !== 2"
+     [class.selected] = "selected"
+     (click)="select()">
+  <div [class.tiene-pieza]="casilla.estado === 1"></div>
+  <span *ngIf="casilla.estado !== 2 ">{{casilla.posX}} {{casilla.posY}}</span>
 </div>
