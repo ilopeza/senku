@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Casilla} from '../casilla';
 import {EstadoPosicion} from '../estado-posicion.enum';
 
@@ -9,32 +9,18 @@ import {EstadoPosicion} from '../estado-posicion.enum';
 })
 export class CasillaComponent implements OnInit {
 
+  @Output() onPressed = new EventEmitter<Casilla>();
   @Input() casilla: Casilla;
-  estadoClass: string;
   selected: boolean;
 
   constructor() { }
 
   ngOnInit() {
     this.selected = false;
-    /*switch (this.casilla.estado) {
-      case EstadoPosicion.vacio:
-        this.estadoClass = 'vacio';
-        break;
-      case EstadoPosicion.ocupado:
-        this.estadoClass = 'ocupado';
-        break;
-      case EstadoPosicion.noDisponible:
-        this.estadoClass = 'no-disponible';
-    }*/
   }
 
-  select(): void {
+  onCasillaSelected(): void {
     this.selected = !this.selected;
-    /*if(this.selected){
-      this.selected = false;
-    }else{
-      this.selected = true;
-    }*/
+    this.onPressed.emit(this.casilla);
   }
 }

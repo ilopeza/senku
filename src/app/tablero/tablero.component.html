@@ -1,5 +1,6 @@
 <div class="container-fluid">
   <div *ngFor="let cas of casillas" class="row">
-      <app-casilla *ngFor="let casilla of cas" [casilla]="casilla"></app-casilla>
+      <app-casilla *ngFor="let casilla of cas" [casilla]="casilla"
+      (onPressed)="select($event)"></app-casilla>
   </div>
 </div>

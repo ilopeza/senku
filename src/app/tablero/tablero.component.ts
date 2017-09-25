@@ -1,20 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Casilla} from '../casilla';
 import {Pieza} from '../pieza';
 import {EstadoPosicion} from '../estado-posicion.enum';
+import {TableroServiceService} from '../tablero-service.service';
+import {forEach} from '@angular/router/src/utils/collection';
+import {CasillaComponent} from '../casilla/casilla.component';
 
 @Component({
   selector: 'app-tablero',
   templateUrl: './tablero.component.html',
-  styleUrls: ['./tablero.component.css']
+  styleUrls: ['./tablero.component.css'],
+  providers: [TableroServiceService]
 })
 export class TableroComponent implements OnInit {
 
+  @ViewChildren(CasillaComponent)
+  private casillasComponent: QueryList<CasillaComponent>;
   casillas: Casilla[][];
   selectedCasillaFrom: Casilla;
   selectedCasillaTo: Casilla;
 
-  constructor() {
+  constructor(private tableroSrv: TableroServiceService) {
   }
 
   ngOnInit() {
@@ -30,7 +36,7 @@ export class TableroComponent implements OnInit {
         let estadoCasilla = EstadoPosicion.noDisponible;
         let p = null;
         if ((i > 2 && i < 6)
-            || (j > 2 && j < 6)) {
+          || (j > 2 && j < 6)) {
           if (i === 4 && j === 4) {
             estadoCasilla = EstadoPosicion.vacio;
           } else {
@@ -49,5 +55,54 @@ export class TableroComponent implements OnInit {
     console.log('Terminado tablero con ' + (x * y) + ' casillas');
   }
 
+  select(selectedCasilla: Casilla): void {
+    // tiene que ser una casilla disponible
+    if (selectedCasilla.estado === EstadoPosicion.noDisponible) {
+      return;
+    }
 
+    // es el primer click sobre el tablero
+    if (this.selectedCasillaFrom == null) {
+      if (selectedCasilla.estado !== EstadoPosicion.ocupado) {
+        return;
+      }
+      this.selectedCasillaFrom = selectedCasilla;
+      this.selectedCasillaTo = null;
+      return;
+    }
+    // es el segundo click sobre el tablero
+    if (this.selectedCasillaTo == null) {
+      if (this.selectedCasillaTo.estado !== EstadoPosicion.vacio) {
+        return;
+      }
+      // esta desocupado
+      this.selectedCasillaTo = selectedCasilla;
+      const casillaMedio = this.getCasillaById(this.selectedCasillaTo, this.selectedCasillaFrom);
+      const casillasMovimiento = [this.selectedCasillaFrom, casillaMedio, this.selectedCasillaTo];
+
+      const message = this.tableroSrv.moverPieza(casillasMovimiento);
+      if (message.get(false) !== null) {
+        alert('Error! ' +  message.get(false));
+        return;
+      }
+      this.selectedCasillaTo = null;
+      this.selectedCasillaFrom = null;
+    }
+  }
+
+  private getCasillaById(casFrom: Casilla, casTo: Casilla) {
+    const posXFrom = casFrom.posX;
+    const posYFrom = casFrom.posY;
+    const posXTo = casTo.posX;
+    const posYTo = casTo.posY;
+    let posX = posXFrom >= posXTo ? posXFrom : posXTo;
+    let posY = posYFrom >= posYTo ? posYFrom : posYTo;
+
+    if ((posYFrom - posYTo) === 0) {
+      posX--;
+    } else {
+      posY--;
+    }
+    return this.casillas[posX][posY];
+  }
 }

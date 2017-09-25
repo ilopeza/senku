@@ -4,7 +4,7 @@
      [class.no-disponible] = "casilla.estado === 2"
      [class.square-border] = "casilla.estado !== 2"
      [class.selected] = "selected"
-     (click)="select()">
+     (click)="onCasillaSelected()">
   <div [class.tiene-pieza]="casilla.estado === 1"></div>
   <span *ngIf="casilla.estado !== 2 ">{{casilla.posX}} {{casilla.posY}}</span>
 </div>
