@@ -20,6 +20,9 @@ export class CasillaComponent implements OnInit {
   }
 
   onCasillaSelected(): void {
+    console.log('onCasillaSelected');
+    console.log(this.casilla);
+
     this.selected = !this.selected;
     this.onPressed.emit(this.casilla);
   }

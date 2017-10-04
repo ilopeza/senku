@@ -9,6 +9,14 @@ export class TableroServiceService {
   constructor() {
   }
 
+  /**
+   * Metodo que mueve una pieza desde una posicion incial hasta una final, atravesando
+   * una casilla intermedia.
+   * @param {Casilla[]} casillas La pos 0 corresponde a la casilla de origen, la 1 a la casilla
+   * ocupada del medio y la 3, a la casilla de destino, la cual debe estar vacia.
+   * @returns {Map<boolean, string>} Mapa clave/valor con key false si hubo un error y true
+   * si el movimiento fue exitoso.
+   */
   moverPieza(casillas: Casilla[]): Map<boolean, string> {
     const response: Map<boolean, string> = new Map<boolean, string>();
     const error = this.validarMovimiento(casillas);
@@ -55,7 +63,7 @@ export class TableroServiceService {
     // la casilla del medio debe estar ocupada tambien. No puede ser 'vacia' ni 'no-disponible'.
     const casillaMedio = casillas[1];
     if (casillaMedio.estado !== EstadoPosicion.ocupado) {
-      response =  'La casilla intermedia no está ocupada.';
+      response = 'La casilla intermedia no está ocupada.';
       return response;
     }
     // la ultima casilla debe estar vacia. No puede ser 'ocupada' ni 'no-disponible'

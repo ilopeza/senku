@@ -56,6 +56,8 @@ export class TableroComponent implements OnInit {
   }
 
   select(selectedCasilla: Casilla): void {
+    console.log('Tablero select');
+    this.limpiarCasillasSelected(this.casillasComponent, this.selectedCasillaTo, this.selectedCasillaFrom);
     // tiene que ser una casilla disponible
     if (selectedCasilla.estado === EstadoPosicion.noDisponible) {
       return;
@@ -66,27 +68,47 @@ export class TableroComponent implements OnInit {
       if (selectedCasilla.estado !== EstadoPosicion.ocupado) {
         return;
       }
+      console.log('Primer click!');
       this.selectedCasillaFrom = selectedCasilla;
       this.selectedCasillaTo = null;
       return;
     }
     // es el segundo click sobre el tablero
     if (this.selectedCasillaTo == null) {
-      if (this.selectedCasillaTo.estado !== EstadoPosicion.vacio) {
+      if (selectedCasilla.estado !== EstadoPosicion.vacio) {
         return;
       }
       // esta desocupado
+      console.log('Segundo click');
       this.selectedCasillaTo = selectedCasilla;
       const casillaMedio = this.getCasillaById(this.selectedCasillaTo, this.selectedCasillaFrom);
       const casillasMovimiento = [this.selectedCasillaFrom, casillaMedio, this.selectedCasillaTo];
 
       const message = this.tableroSrv.moverPieza(casillasMovimiento);
-      if (message.get(false) !== null) {
-        alert('Error! ' +  message.get(false));
+      if (message.has(false)) {
+        alert('Error! ' + message.get(false));
         return;
       }
+
+      this.limpiarCasillasSelected(this.casillasComponent, this.selectedCasillaTo, this.selectedCasillaFrom);
+
       this.selectedCasillaTo = null;
       this.selectedCasillaFrom = null;
+    }
+  }
+
+  /**
+   * Metodo privado que limpia las casillas sucias que quedaron como selected.
+   * @param {QueryList<CasillaComponent>} components
+   * @param {Casilla} primerCasilla
+   * @param {Casilla} segundaCasilla
+   */
+  private limpiarCasillasSelected(components: QueryList<CasillaComponent>,
+                                  primerCasilla: Casilla, segundaCasilla: Casilla) {
+    const cas: CasillaComponent[] = components
+      .filter(item => item.casilla === primerCasilla || item.casilla === segundaCasilla);
+    for (let i = 0; i < cas.length; i++) {
+      cas[i].selected = false;
     }
   }
 
